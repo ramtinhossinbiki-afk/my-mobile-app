@@ -1,0 +1,14 @@
+RAM HUB Mobile - Build APK on GitHub
+
+1. Create a GitHub repository.
+2. Upload ALL files from this folder, including the hidden .github folder.
+3. Open the Actions tab.
+4. Select "Build Android APK".
+5. Click "Run workflow".
+6. Wait for the build to finish.
+7. Open the completed workflow and download the artifact named:
+   RAM-HUB-debug-APK
+
+The APK inside the downloaded artifact is the installable Android app.
+
+This project uses Gradle 8.9 in GitHub Actions, so a local Gradle wrapper is not required for the cloud build.
