@@ -1,4 +1,4 @@
-name: Build Signed APK and AAB
+name: Build APK and AAB
 
 on:
   push:
@@ -24,17 +24,13 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Make Gradle executable
-        working-directory: RAM_HUB_Mobile
-        run: chmod +x gradlew
-
       - name: Build Release APK
         working-directory: RAM_HUB_Mobile
-        run: ./gradlew assembleRelease
+        run: gradle assembleRelease
 
       - name: Build Release AAB
         working-directory: RAM_HUB_Mobile
-        run: ./gradlew bundleRelease
+        run: gradle bundleRelease
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
