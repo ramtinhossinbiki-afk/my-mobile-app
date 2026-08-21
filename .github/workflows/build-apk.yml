@@ -1,4 +1,4 @@
-name: Build Signed Release APK
+name: Build Signed APK and AAB
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
 
 jobs:
   build:
-    name: Build Signed Release APK
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -24,42 +24,28 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Make Gradle executable
+        working-directory: RAM_HUB_Mobile
+        run: chmod +x gradlew
+
       - name: Build Release APK
         working-directory: RAM_HUB_Mobile
         run: ./gradlew assembleRelease
 
-      - name: Generate signing keystore
+      - name: Build Release AAB
         working-directory: RAM_HUB_Mobile
-        run: |
-          keytool -genkeypair \
-            -v \
-            -keystore release-key.jks \
-            -alias ramhub \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
-            -keypass ${{ secrets.KEY_PASSWORD }} \
-            -dname "CN=RAM HUB, OU=Development, O=RAM HUB, L=Tehran, ST=Tehran, C=IR"
+        run: ./gradlew bundleRelease
 
-      - name: Sign Release APK
-        working-directory: RAM_HUB_Mobile
-        run: |
-          $ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools | sort -V | tail -n 1)/apksigner sign \
-            --ks release-key.jks \
-            --ks-key-alias ramhub \
-            --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
-            --key-pass pass:${{ secrets.KEY_PASSWORD }} \
-            --out app/build/outputs/apk/release/RAM-HUB-release.apk \
-            app/build/outputs/apk/release/app-release-unsigned.apk
-
-      - name: Verify APK signature
-        working-directory: RAM_HUB_Mobile
-        run: |
-          $ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools | sort -V | tail -n 1)/apksigner verify --verbose app/build/outputs/apk/release/RAM-HUB-release.apk
-
-      - name: Upload Signed Release APK
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: RAM-HUB-Signed-Release
-          path: RAM_HUB_Mobile/app/build/outputs/apk/release/RAM-HUB-release.apk
+          name: RAM-HUB-Release-APK
+          path: RAM_HUB_Mobile/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload Release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: RAM-HUB-Release-AAB
+          path: RAM_HUB_Mobile/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
