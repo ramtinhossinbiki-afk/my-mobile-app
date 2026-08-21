@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
 
-    private val ramHubUrl = "https://ramtinhosseinbiki-afk.github.io/RAM-HUB/"
+    private val ramHubUrl = "https://ramtinhossinbiki-afk.github.io/RAM-HUB/"
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
