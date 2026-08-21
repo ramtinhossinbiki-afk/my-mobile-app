@@ -8,6 +8,8 @@
         android:label="RAM HUB"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:icon="@drawable/app_icon"
+        android:roundIcon="@drawable/app_icon"
         android:usesCleartextTraffic="false">
 
         <activity
